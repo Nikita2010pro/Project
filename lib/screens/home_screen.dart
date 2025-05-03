@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project/data/tours.dart';
+import 'package:project/screens/tour_detail_screen.dart';
 import '/screens/account_screen.dart';
 import '/screens/login_screen.dart';
 
@@ -17,7 +19,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              if ((user == null)) {
+              if (user == null) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -38,12 +40,50 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Center(
-          child: (user == null)
-              ? const Text("Контент для НЕ зарегистрированных в системе")
-              : const Text('Контент для ЗАРЕГИСТРИРОВАННЫХ в системе'),
-          //child: Text('Контент для НЕ зарегистрированных в системе'),
-        ),
+        child: (user == null)
+            ? const Center(
+                child: Text("Контент для НЕ зарегистрированных в системе"),
+              )
+            : ListView.builder(
+                itemCount: tours.length,
+                itemBuilder: (ctx, index) {
+                  final tour = tours[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => TourDetailScreen(tour: tour),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Image.network(tour.imageUrl),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  tour.title,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(tour.description),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
