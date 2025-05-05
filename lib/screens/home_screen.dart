@@ -15,7 +15,11 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Главная страница'),
+        title: const Text(
+          'Главная страница',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.lightBlue.shade700,
         actions: [
           IconButton(
             onPressed: () {
@@ -34,7 +38,7 @@ class HomeScreen extends StatelessWidget {
             },
             icon: Icon(
               Icons.person,
-              color: (user == null) ? Colors.white : Colors.yellow,
+              color: (user == null) ? Colors.white : Colors.amberAccent,
             ),
           ),
         ],
@@ -42,9 +46,13 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: (user == null)
             ? const Center(
-                child: Text("Контент для НЕ зарегистрированных в системе"),
+                child: Text(
+                  "Контент для НЕ зарегистрированных в системе",
+                  style: TextStyle(fontSize: 16),
+                ),
               )
             : ListView.builder(
+                padding: const EdgeInsets.all(12),
                 itemCount: tours.length,
                 itemBuilder: (ctx, index) {
                   final tour = tours[index];
@@ -57,24 +65,49 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                     child: Card(
-                      margin: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 6,
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      clipBehavior: Clip.antiAlias,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.network(tour.imageUrl),
+                          AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Image.network(
+                              tour.imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Center(child: Icon(Icons.broken_image)),
+                              loadingBuilder: (context, child, progress) {
+                                if (progress == null) return child;
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            ),
+                          ),
                           Padding(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   tour.title,
                                   style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Text(tour.description),
+                                const SizedBox(height: 8),
+                                Text(
+                                  tour.description,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
