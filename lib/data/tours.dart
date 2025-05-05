@@ -3,14 +3,15 @@ import '../models/tour.dart';
 final List<Tour> tours = [
   Tour(
     id: '1',
-    title: 'Отдых в Сочи',
-    description: 'Море, солнце и пальмы. Отличный отдых на побережье!',
+    title: 'Steigenberger Makadi',
+    description: 'Отель VIP-класса с собственным гольф-полем. Рекомендуем для респектабельного отдыха. Отель принимает гостей от 18 лет.',
     imageUrl: 'https://pic.rutubelist.ru/video/ed/bf/edbfb8aa0f008db2fc7dcc988f036fd4.jpg',
-  ),
-  Tour(
-    id: '2',
-    title: 'Путешествие по Байкалу',
-    description: 'Невероятная природа и спокойствие.',
-    imageUrl: 'https://pic.rutubelist.ru/video/1c/a6/1ca6a6ed4452fb6ea4a07688b446414e.jpg',
+    location: 'Madinat Makadi, Safaga Road, Makadi Bay, Египет',
+    rating: 5.0,
+    price: 134673,
+    airportDistance: '30 км до аэропорта',
+    beachDistance: '1 км до пляжа',
+    features: ['3-я линия', 'Платный Wi-Fi в фойе'],
   ),
 ];
+
