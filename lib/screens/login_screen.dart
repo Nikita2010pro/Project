@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           // Фоновое изображение
           Image.asset(
-            'assets/images/ocean_background.jpg',
+            'assets/images/background3.jpg',
             fit: BoxFit.cover,
           ),
 
