@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/screens/room_selection_screen.dart';
 import '../models/tour.dart';
 
 class TourDetailScreen extends StatelessWidget {
@@ -162,9 +163,12 @@ class TourDetailScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-          onPressed: () {
-            // TODO: переход на экран выбора номера
-          },
+onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const RoomSelectionScreen()),
+  );
+},
           child: const Text(
             'К выбору номера',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
