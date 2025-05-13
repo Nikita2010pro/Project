@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project/screens/room_selection_screen.dart';
+import 'package:project/data/room_selection_screen.dart';
 import '../models/hotel.dart';
 
 class HotelDetailScreen extends StatelessWidget {
