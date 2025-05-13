@@ -1,4 +1,4 @@
-class hotel {
+class Hotel {
   final String id;
   final String title;
   final String description;
@@ -10,7 +10,7 @@ class hotel {
   final String beachDistance;
   final List<String> features;
 
-  hotel({
+  Hotel({
     required this.id,
     required this.title,
     required this.description,

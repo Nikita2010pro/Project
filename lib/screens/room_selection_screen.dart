@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/data/hotels.dart';
 import 'package:project/models/room_card.dart';
 
 class RoomSelectionScreen extends StatelessWidget {
@@ -12,6 +13,7 @@ class RoomSelectionScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           RoomCard(
+            hotel: hotels[0],
             title: 'Стандартный номер с видом на бассейн',
             images: [
               'https://avatars.mds.yandex.net/get-altay/12813249/2a00000191c5df23708d1b7d6b96d25e6139/XXXL',
@@ -22,6 +24,7 @@ class RoomSelectionScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           RoomCard(
+            hotel: hotels[1],
             title: 'Люкс с джакузи',
             images: [
               'https://avatars.mds.yandex.net/i?id=9a6a409a96730e12067a70505c1f21f2_sr-3979482-images-thumbs&n=13',

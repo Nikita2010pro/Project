@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project/models/hotel.dart';
 import 'package:project/screens/booking_screen.dart';
 
 
 class RoomCard extends StatefulWidget {
+  final Hotel hotel;
   final String title;
   final List<String> images;
   final List<String> features;
@@ -10,11 +12,12 @@ class RoomCard extends StatefulWidget {
 
   const RoomCard({
     Key? key,
+    required this.hotel,
     required this.title,
     required this.images,
     required this.features,
     required this.price,
-  });
+  }) : super(key: key);
 
 
   State<RoomCard> createState() => _RoomCardState();
@@ -144,18 +147,16 @@ class _RoomCardState extends State<RoomCard> {
               onPressed: () {
     // Собираем данные для бронирования
 final bookingData = BookingData(
-      hotelName: widget.title,
+      hotelName: widget.hotel.title,
       city: 'Москва', // или из переменных
-      country: 'Россия',
+      country: widget.hotel.location,
       departureDate: '2024-05-01', // ваши даты
-      returnDate: '2024-05-10',
-      nights: 9,
+      returnDate: '2024-05-08',
+      nights: 7,
       roomTitle: widget.title,
       roomFeatures: widget.features.join(', '),
       roomPrice: widget.price,
       images: widget.images,
-      tourTitle: 'Название тура', // если есть
-      tourPrice: 50000,
       fuelFee: 2000,
       serviceFee: 3000,
     );

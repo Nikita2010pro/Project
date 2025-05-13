@@ -14,9 +14,6 @@ class BookingData {
   final double roomPrice;
   final List<String> images;
 
-  final String tourTitle;
-  final double tourPrice;
-
   final double fuelFee;
   final double serviceFee;
 
@@ -31,14 +28,19 @@ class BookingData {
     required this.roomFeatures,
     required this.roomPrice,
     required this.images,
-    required this.tourTitle,
-    required this.tourPrice,
     required this.fuelFee,
     required this.serviceFee,
   });
+
+  double get totalCost => roomPrice + fuelFee + serviceFee;
 }
 
-// Ваш виджет экрана бронирования
+// Константы стилей
+const TextStyle headerStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo);
+TextStyle subHeaderStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey[700]);
+const TextStyle costTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green);
+
+/// Виджет экрана бронирования
 class BookingScreen extends StatelessWidget {
   final BookingData bookingData;
 
@@ -46,10 +48,9 @@ class BookingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double totalCost = bookingData.roomPrice + bookingData.tourPrice + bookingData.fuelFee + bookingData.serviceFee;
-
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.indigo,
         title: const Text('Подтверждение бронирования'),
       ),
       body: SingleChildScrollView(
@@ -57,93 +58,150 @@ class BookingScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Информация о отеле/номере
-            Text(
-              'Отель: ${bookingData.hotelName}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text('Город: ${bookingData.city}, ${bookingData.country}'),
-            Text('Даты: ${bookingData.departureDate} - ${bookingData.returnDate} (${bookingData.nights} ночей)'),
+            HotelInfoSection(bookingData: bookingData),
             const SizedBox(height: 12),
-
-            // Изображения
-            SizedBox(
-              height: 200,
-              child: PageView.builder(
-                itemCount: bookingData.images.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        bookingData.images[index],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            ImagesSection(images: bookingData.images),
             const SizedBox(height: 16),
-
-            // Детали номера
-            Text(
-              'Номер: ${bookingData.roomTitle}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            Text('Особенности: ${bookingData.roomFeatures}'),
-            Text('Цена номера: ${bookingData.roomPrice.toStringAsFixed(0)} ₽'),
-
+            RoomDetailsSection(bookingData: bookingData),
             const SizedBox(height: 16),
-
-            // Информация о туре
-            Text(
-              'Тур: ${bookingData.tourTitle}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            Text('Цена тура: ${bookingData.tourPrice.toStringAsFixed(0)} ₽'),
-
-            const SizedBox(height: 16),
-
-            // Дополнительные сборы
-            Text('Топливо: ${bookingData.fuelFee.toStringAsFixed(0)} ₽'),
-            Text('Обслуживание: ${bookingData.serviceFee.toStringAsFixed(0)} ₽'),
-
-            const Divider(height: 24, thickness: 1),
-
-            // Общая стоимость
-            Text(
-              'Общая сумма: ${totalCost.toStringAsFixed(0)} ₽',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-
+            AdditionalFeesSection(bookingData: bookingData),
+            const Divider(height: 24, thickness: 1, color: Colors.grey),
+            TotalCostSection(totalCost: bookingData.totalCost),
             const SizedBox(height: 24),
+            ConfirmButton(onPressed: () {
+              // Реализуйте логику подтверждения бронирования
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Бронирование подтверждено!')),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-            // Кнопка подтверждения
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () {
-                  // Тут можете реализовать логику подтверждения бронирования
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Бронирование подтверждено!')),
-                  );
-                },
-                child: const Text(
-                  'Подтвердить бронирование',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
+// Секция с информацией об отеле
+class HotelInfoSection extends StatelessWidget {
+  final BookingData bookingData;
+  const HotelInfoSection({Key? key, required this.bookingData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Отель: ${bookingData.hotelName}', style: headerStyle),
+        Text('Город: ${bookingData.city}, ${bookingData.country}', style: subHeaderStyle),
+        Text('Даты: ${bookingData.departureDate} - ${bookingData.returnDate} (${bookingData.nights} ночей)', style: subHeaderStyle),
+      ],
+    );
+  }
+}
+
+// Секция с изображениями
+class ImagesSection extends StatelessWidget {
+  final List<String> images;
+  const ImagesSection({Key? key, required this.images}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (images.isEmpty) {
+      return const SizedBox();
+    }
+    return SizedBox(
+      height: 200,
+      child: PageView.builder(
+        itemCount: images.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                images[index],
+                fit: BoxFit.cover,
+                width: double.infinity,
               ),
             ),
-          ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Секция с деталями номера
+class RoomDetailsSection extends StatelessWidget {
+  final BookingData bookingData;
+  const RoomDetailsSection({Key? key, required this.bookingData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Номер: ${bookingData.roomTitle}', style: subHeaderStyle),
+        Text('Особенности: ${bookingData.roomFeatures}', style: subHeaderStyle),
+        Text('Цена номера: ${bookingData.roomPrice.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+      ],
+    );
+  }
+}
+
+// Секция с дополнительными сборами
+class AdditionalFeesSection extends StatelessWidget {
+  final BookingData bookingData;
+  const AdditionalFeesSection({Key? key, required this.bookingData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Топливо: ${bookingData.fuelFee.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+        Text('Обслуживание: ${bookingData.serviceFee.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+      ],
+    );
+  }
+}
+
+// Секция общей стоимости
+class TotalCostSection extends StatelessWidget {
+  final double totalCost;
+  const TotalCostSection({Key? key, required this.totalCost}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Общая сумма: ${totalCost.toStringAsFixed(0)} ₽',
+      style: costTextStyle,
+    );
+  }
+}
+
+// Кнопка подтверждения бронирования
+class ConfirmButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const ConfirmButton({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16), backgroundColor: Colors.indigo, // Цвет кнопки
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          shadowColor: Colors.black.withOpacity(0.3),
+          elevation: 5,
+        ),
+        onPressed: onPressed,
+        child: const Text(
+          'Подтвердить бронирование',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
     );

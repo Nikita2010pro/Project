@@ -3,7 +3,7 @@ import 'package:project/screens/room_selection_screen.dart';
 import '../models/hotel.dart';
 
 class HotelDetailScreen extends StatelessWidget {
-  final hotel tour;
+  final Hotel tour;
 
   const HotelDetailScreen({super.key, required this.tour});
 

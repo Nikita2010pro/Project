@@ -1,7 +1,7 @@
 import '../models/hotel.dart';
 
-final List<hotel> hotels = [
-  hotel(
+final List<Hotel> hotels = [
+  Hotel(
     id: '1',
     title: 'Steigenberger Makadi',
     description:
@@ -15,7 +15,7 @@ final List<hotel> hotels = [
     beachDistance: '1 км до пляжа',
     features: ['3-я линия', 'Платный Wi-Fi в фойе'],
   ),
-  hotel(
+  Hotel(
     id: '2',
     title: 'Coral Beach Resort',
     description:
@@ -29,7 +29,7 @@ final List<hotel> hotels = [
     beachDistance: '0 м до пляжа',
     features: ['1-я линия', 'All Inclusive', 'Детская зона'],
   ),
-  hotel(
+  Hotel(
     id: '3',
     title: 'Hotel Golden Horn',
     description:
@@ -43,7 +43,7 @@ final List<hotel> hotels = [
     beachDistance: '6 км до побережья',
     features: ['Завтрак включён', 'Wi-Fi', 'Трансфер в центр'],
   ),
-  hotel(
+  Hotel(
     id: '4',
     title: 'Grand Palladium Palace Ibiza Resort',
     description:
@@ -57,7 +57,7 @@ final List<hotel> hotels = [
     beachDistance: '100 м до пляжа',
     features: ['Beach Club', 'Диджей по вечерам', 'All Inclusive'],
   ),
-  hotel(
+  Hotel(
     id: '5',
     title: 'Alpenhof Hotel Garni',
     description:
