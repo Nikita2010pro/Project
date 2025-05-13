@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:project/screens/room_selection_screen.dart';
-import '../models/tour.dart';
+import '../models/hotel.dart';
 
-class TourDetailScreen extends StatelessWidget {
-  final Tour tour;
+class HotelDetailScreen extends StatelessWidget {
+  final hotel tour;
 
-  const TourDetailScreen({super.key, required this.tour});
+  const HotelDetailScreen({super.key, required this.tour});
 
   @override
   Widget build(BuildContext context) {

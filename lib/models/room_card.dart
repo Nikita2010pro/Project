@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project/screens/booking_screen.dart';
+
 
 class RoomCard extends StatefulWidget {
   final String title;
@@ -7,14 +9,14 @@ class RoomCard extends StatefulWidget {
   final double price;
 
   const RoomCard({
-    super.key,
+    Key? key,
     required this.title,
     required this.images,
     required this.features,
     required this.price,
   });
 
-  @override
+
   State<RoomCard> createState() => _RoomCardState();
 }
 
@@ -140,8 +142,31 @@ class _RoomCardState extends State<RoomCard> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // TODO: переход на экран бронирования
-              },
+    // Собираем данные для бронирования
+final bookingData = BookingData(
+      hotelName: widget.title,
+      city: 'Москва', // или из переменных
+      country: 'Россия',
+      departureDate: '2024-05-01', // ваши даты
+      returnDate: '2024-05-10',
+      nights: 9,
+      roomTitle: widget.title,
+      roomFeatures: widget.features.join(', '),
+      roomPrice: widget.price,
+      images: widget.images,
+      tourTitle: 'Название тура', // если есть
+      tourPrice: 50000,
+      fuelFee: 2000,
+      serviceFee: 3000,
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BookingScreen(bookingData: bookingData),
+      ),
+    );
+  },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 14),

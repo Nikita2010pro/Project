@@ -1,7 +1,7 @@
-import '../models/tour.dart';
+import '../models/hotel.dart';
 
-final List<Tour> tours = [
-  Tour(
+final List<hotel> hotels = [
+  hotel(
     id: '1',
     title: 'Steigenberger Makadi',
     description:
@@ -15,7 +15,7 @@ final List<Tour> tours = [
     beachDistance: '1 км до пляжа',
     features: ['3-я линия', 'Платный Wi-Fi в фойе'],
   ),
-  Tour(
+  hotel(
     id: '2',
     title: 'Coral Beach Resort',
     description:
@@ -29,7 +29,7 @@ final List<Tour> tours = [
     beachDistance: '0 м до пляжа',
     features: ['1-я линия', 'All Inclusive', 'Детская зона'],
   ),
-  Tour(
+  hotel(
     id: '3',
     title: 'Hotel Golden Horn',
     description:
@@ -43,7 +43,7 @@ final List<Tour> tours = [
     beachDistance: '6 км до побережья',
     features: ['Завтрак включён', 'Wi-Fi', 'Трансфер в центр'],
   ),
-  Tour(
+  hotel(
     id: '4',
     title: 'Grand Palladium Palace Ibiza Resort',
     description:
@@ -57,7 +57,7 @@ final List<Tour> tours = [
     beachDistance: '100 м до пляжа',
     features: ['Beach Club', 'Диджей по вечерам', 'All Inclusive'],
   ),
-  Tour(
+  hotel(
     id: '5',
     title: 'Alpenhof Hotel Garni',
     description:

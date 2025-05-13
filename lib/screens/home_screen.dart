@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:project/data/tours.dart';
-import 'package:project/screens/tour_detail_screen.dart';
+import 'package:project/data/hotels.dart';
+import 'package:project/screens/hotel_detail_screen.dart';
 import '/screens/account_screen.dart';
 import '/screens/login_screen.dart';
 
@@ -53,14 +53,14 @@ class HomeScreen extends StatelessWidget {
               )
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
-                itemCount: tours.length,
+                itemCount: hotels.length,
                 itemBuilder: (ctx, index) {
-                  final tour = tours[index];
+                  final tour = hotels[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => TourDetailScreen(tour: tour),
+                          builder: (_) => HotelDetailScreen(tour: tour),
                         ),
                       );
                     },

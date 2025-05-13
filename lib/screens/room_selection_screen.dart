@@ -29,6 +29,7 @@ class RoomSelectionScreen extends StatelessWidget {
             ],
             features: ['Все включено', 'Собственный бассейн', 'Кондиционер'],
             price: 289000,
+        
           ),
         ],
       ),
