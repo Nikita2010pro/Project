@@ -3,13 +3,13 @@ import 'package:project/models/booking_data.dart';
 import 'package:project/models/hotel.dart';
 import 'package:project/screens/booking_screen.dart';
 
-
 class RoomCard extends StatefulWidget {
   final Hotel hotel;
   final String title;
   final List<String> images;
   final List<String> features;
   final double price;
+  final String description;
 
   const RoomCard({
     Key? key,
@@ -18,8 +18,8 @@ class RoomCard extends StatefulWidget {
     required this.images,
     required this.features,
     required this.price,
+    required this.description,
   }) : super(key: key);
-
 
   @override
   State<RoomCard> createState() => _RoomCardState();
@@ -43,6 +43,9 @@ class _RoomCardState extends State<RoomCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Печать для отладки
+    print('Images in RoomCard: ${widget.images}');
+    
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 24),
@@ -57,27 +60,35 @@ class _RoomCardState extends State<RoomCard> {
           )
         ],
       ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 📸 Вот тут находится PageView
-        SizedBox(
-          height: 180,
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: widget.images.length,
-            itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  widget.images[index],
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
-          ),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 📸 Здесь находится PageView
+          widget.images.isNotEmpty
+              ? SizedBox(
+                  height: 180,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: widget.images.length,
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          widget.images[index],
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Center(child: Icon(Icons.broken_image)),
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return const Center(child: CircularProgressIndicator());
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                )
+              : const Center(child: Text('Нет изображений')),
           const SizedBox(height: 12),
 
           // Название
@@ -121,11 +132,11 @@ class _RoomCardState extends State<RoomCard> {
 
           // Описание
           if (_showDetails)
-            const Padding(
-              padding: EdgeInsets.only(top: 4),
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
               child: Text(
-                'Просторный номер с панорамными окнами, большой кроватью и джакузи. Идеален для отдыха вдвоем. В номере есть телевизор, сейф, мини-бар и бесплатный Wi-Fi.',
-                style: TextStyle(fontSize: 13, height: 1.4),
+                widget.description, // Отображаем описание из Firebase
+                style: const TextStyle(fontSize: 13, height: 1.4),
               ),
             ),
 
@@ -147,28 +158,28 @@ class _RoomCardState extends State<RoomCard> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-    // Собираем данные для бронирования
-final bookingData = BookingData(
-      hotelName: widget.hotel.title,
-      country: widget.hotel.location,
-      departureDate: '2024-05-01', // ваши даты
-      returnDate: '2024-05-08',
-      nights: 7,
-      roomTitle: widget.title,
-      roomFeatures: widget.features.join(', '),
-      roomPrice: widget.price,
-      images: widget.images,
-      fuelFee: 2000,
-      serviceFee: 3000,
-    );
+                // Собираем данные для бронирования
+                final bookingData = BookingData(
+                  hotelName: widget.hotel.title,
+                  country: widget.hotel.location,
+                  departureDate: '2024-05-01', // ваши даты
+                  returnDate: '2024-05-08',
+                  nights: 7,
+                  roomTitle: widget.title,
+                  roomFeatures: widget.features.join(', '),
+                  roomPrice: widget.price,
+                  images: widget.images,
+                  fuelFee: 2000,
+                  serviceFee: 3000,
+                );
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => BookingScreen(bookingData: bookingData),
-      ),
-    );
-  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BookingScreen(bookingData: bookingData),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 14),

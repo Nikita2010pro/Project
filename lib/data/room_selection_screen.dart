@@ -1,39 +1,91 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project/models/hotel.dart';
+import 'package:project/models/room.dart';
 import 'package:project/models/room_card.dart';
 
-class RoomSelectionScreen extends StatelessWidget {
+class RoomSelectionScreen extends StatefulWidget {
   final Hotel hotel;
 
-  const RoomSelectionScreen({super.key, required this.hotel});
+  const RoomSelectionScreen({Key? key, required this.hotel}) : super(key: key);
+
+  @override
+  State<RoomSelectionScreen> createState() => _RoomSelectionScreenState();
+}
+
+class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
+  late Future<List<Room>> _roomsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _roomsFuture = fetchRooms();
+  }
+
+  Future<List<Room>> fetchRooms() async {
+    final hotelId = widget.hotel.id;
+    print('Загружаем номера для hotelId: $hotelId');
+
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('hotels')
+          .doc(hotelId) // hotelId должен точно совпадать с ID документа в Firebase
+          .collection('rooms')
+          .get();
+
+      print('Найдено документов: ${querySnapshot.docs.length}');
+
+      final rooms = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        print('Документ: $data');
+        return Room.fromJson(data, doc.id);
+      }).toList();
+
+      print('Итого номеров: ${rooms.length}');
+      return rooms;
+    } catch (e) {
+      print('Ошибка при загрузке номеров: $e');
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Выбор номера')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          RoomCard(
-            hotel: hotel,
-            title: 'Стандартный номер с видом на бассейн',
-            images: [
-              'https://avatars.mds.yandex.net/get-altay/12813249/2a00000191c5df23708d1b7d6b96d25e6139/XXXL',
-            ],
-            features: ['Включен только завтрак', 'Кондиционер'],
-            price: 186600,
-          ),
-          const SizedBox(height: 24),
-          RoomCard(
-            hotel: hotel,
-            title: 'Люкс с джакузи',
-            images: [
-              'https://avatars.mds.yandex.net/i?id=9a6a409a96730e12067a70505c1f21f2_sr-3979482-images-thumbs&n=13',
-            ],
-            features: ['Все включено', 'Собственный бассейн', 'Кондиционер'],
-            price: 289000,
-          ),
-        ],
+      body: FutureBuilder<List<Room>>(
+        future: _roomsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            print("Ошибка загрузки номеров: ${snapshot.error}");
+            return const Center(child: Text('Ошибка загрузки номеров'));
+          }
+
+          final rooms = snapshot.data ?? [];
+
+          if (rooms.isEmpty) {
+            return const Center(child: Text('Нет доступных номеров'));
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: rooms.length,
+            itemBuilder: (context, index) {
+              final room = rooms[index];
+              return RoomCard(
+                hotel: widget.hotel,
+                title: room.title,
+                images: room.images,
+                features: room.features,
+                price: room.price,
+                description: room.description,
+              );
+            },
+          );
+        },
       ),
     );
   }
