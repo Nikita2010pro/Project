@@ -22,4 +22,20 @@ class Hotel {
     required this.beachDistance,
     required this.features,
   });
+
+
+factory Hotel.fromFirestore(Map<String, dynamic> data, String id) {
+    return Hotel(
+      id: id,
+      title: data['title'] ?? '',
+      description: data['description'] ?? '',
+      imageUrl: data['imageUrl'] ?? '',
+      location: data['location'] ?? '',
+      rating: (data['rating'] ?? 0).toDouble(),
+      price: (data['price'] ?? 0),
+      airportDistance: data['airportDistance'] ?? '',
+      beachDistance: data['beachDistance'] ?? '',
+      features: List<String>.from(data['features'] ?? []),
+    );
+  }
 }

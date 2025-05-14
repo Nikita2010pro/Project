@@ -1,6 +1,5 @@
 class BookingData {
   final String hotelName;
-  final String city;
   final String country;
   final String departureDate;
   final String returnDate;
@@ -16,7 +15,6 @@ class BookingData {
 
   BookingData({
     required this.hotelName,
-    required this.city,
     required this.country,
     required this.departureDate,
     required this.returnDate,

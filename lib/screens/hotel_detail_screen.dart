@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project/data/room_selection_screen.dart';
 import '../models/hotel.dart';
+import 'package:project/data/room_selection_screen.dart';
 
 class HotelDetailScreen extends StatelessWidget {
   final Hotel tour;
@@ -163,12 +163,13 @@ class HotelDetailScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (_) => const RoomSelectionScreen()),
-  );
-},
+          onPressed: () {
+            Navigator.of(context).push(
+  MaterialPageRoute(
+    builder: (_) => RoomSelectionScreen(hotel: tour), // где tour — это Hotel
+  ),
+);
+          },
           child: const Text(
             'К выбору номера',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),

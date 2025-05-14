@@ -235,7 +235,7 @@ class HotelInfoSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Отель: ${bookingData.hotelName}', style: headerStyle),
-            Text('Город: ${bookingData.city}, ${bookingData.country}', style: subHeaderStyle),
+            Text('Город: ${bookingData.country}', style: subHeaderStyle),
             Text('Даты: ${bookingData.departureDate} - ${bookingData.returnDate} (${bookingData.nights} ночей)', style: subHeaderStyle),
           ],
         ),

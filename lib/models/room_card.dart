@@ -150,7 +150,6 @@ class _RoomCardState extends State<RoomCard> {
     // Собираем данные для бронирования
 final bookingData = BookingData(
       hotelName: widget.hotel.title,
-      city: 'Москва', // или из переменных
       country: widget.hotel.location,
       departureDate: '2024-05-01', // ваши даты
       returnDate: '2024-05-08',
