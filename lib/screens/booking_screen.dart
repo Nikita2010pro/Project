@@ -291,6 +291,7 @@ class RoomDetailsSection extends StatelessWidget {
 // Секция с дополнительными сборами
 class AdditionalFeesSection extends StatelessWidget {
   final BookingData bookingData;
+
   const AdditionalFeesSection({Key? key, required this.bookingData}) : super(key: key);
 
   @override
@@ -300,6 +301,9 @@ class AdditionalFeesSection extends StatelessWidget {
       children: [
         Text('Топливо: ${bookingData.fuelFee.toStringAsFixed(0)} ₽', style: subHeaderStyle),
         Text('Обслуживание: ${bookingData.serviceFee.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+        if (bookingData.extraNightsCost > 0)
+          Text('Дополнительные дни: ${bookingData.extraNightsCost.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+
 ],
 );
 }

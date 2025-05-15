@@ -12,6 +12,8 @@ class BookingData {
 
   final double fuelFee;
   final double serviceFee;
+ final int extraNightsCost;
+
 
   BookingData({
     required this.hotelName,
@@ -25,7 +27,9 @@ class BookingData {
     required this.images,
     required this.fuelFee,
     required this.serviceFee,
+    required this.extraNightsCost,
+
   });
 
-  double get totalCost => roomPrice + fuelFee + serviceFee;
+  double get totalCost => roomPrice + fuelFee + serviceFee + extraNightsCost;
 }

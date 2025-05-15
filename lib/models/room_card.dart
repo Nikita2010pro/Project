@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project/models/booking_data.dart';
 import 'package:project/models/hotel.dart';
 import 'package:project/screens/booking_screen.dart';
+import 'package:project/screens/date_picker_dialog.dart';
+
 
 class RoomCard extends StatefulWidget {
   final Hotel hotel;
@@ -43,9 +45,6 @@ class _RoomCardState extends State<RoomCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Печать для отладки
-    print('Images in RoomCard: ${widget.images}');
-    
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 24),
@@ -63,7 +62,6 @@ class _RoomCardState extends State<RoomCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 📸 Здесь находится PageView
           widget.images.isNotEmpty
               ? SizedBox(
                   height: 180,
@@ -135,7 +133,7 @@ class _RoomCardState extends State<RoomCard> {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                widget.description, // Отображаем описание из Firebase
+                widget.description,
                 style: const TextStyle(fontSize: 13, height: 1.4),
               ),
             ),
@@ -157,21 +155,29 @@ class _RoomCardState extends State<RoomCard> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // Собираем данные для бронирования
-                final bookingData = BookingData(
-                  hotelName: widget.hotel.title,
-                  country: widget.hotel.location,
-                  departureDate: '2024-05-01', // ваши даты
-                  returnDate: '2024-05-08',
-                  nights: 7,
-                  roomTitle: widget.title,
-                  roomFeatures: widget.features.join(', '),
-                  roomPrice: widget.price,
-                  images: widget.images,
-                  fuelFee: 2000,
-                  serviceFee: 3000,
-                );
+              onPressed: () async {
+                final selectedRange = await showDateRangePickerDialog(context);
+
+                if (selectedRange == null) return;
+
+final nights = selectedRange.duration.inDays;
+final extraNights = nights > 7 ? nights - 7 : 0;
+final extraNightsCost = extraNights * 5000;
+
+final bookingData = BookingData(
+  hotelName: widget.hotel.title,
+  country: widget.hotel.location,
+  departureDate: selectedRange.start.toIso8601String().split('T').first,
+  returnDate: selectedRange.end.toIso8601String().split('T').first,
+  nights: nights,
+  roomTitle: widget.title,
+  roomFeatures: widget.features.join(', '),
+  roomPrice: widget.price,
+  images: widget.images,
+  fuelFee: 2000,
+  serviceFee: 3000,
+  extraNightsCost: extraNightsCost,
+);;
 
                 Navigator.push(
                   context,
