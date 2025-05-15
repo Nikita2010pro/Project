@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/hotel.dart';
-import 'package:project/data/room_selection_screen.dart';
+import 'package:project/screens/room_selection_screen.dart';
 
 class HotelDetailScreen extends StatelessWidget {
   final Hotel tour;
