@@ -160,24 +160,24 @@ class _RoomCardState extends State<RoomCard> {
 
                 if (selectedRange == null) return;
 
-final nights = selectedRange.duration.inDays;
-final extraNights = nights > 7 ? nights - 7 : 0;
-final extraNightsCost = extraNights * 5000;
+                final nights = selectedRange.duration.inDays;
+                final extraNights = nights > 7 ? nights - 7 : 0;
+                final extraNightsCost = extraNights * 5000;
 
-final bookingData = BookingData(
-  hotelName: widget.hotel.title,
-  country: widget.hotel.location,
-  departureDate: selectedRange.start.toIso8601String().split('T').first,
-  returnDate: selectedRange.end.toIso8601String().split('T').first,
-  nights: nights,
-  roomTitle: widget.title,
-  roomFeatures: widget.features.join(', '),
-  roomPrice: widget.price,
-  images: widget.images,
-  fuelFee: 2000,
-  serviceFee: 3000,
-  extraNightsCost: extraNightsCost,
-);;
+                final bookingData = BookingData(
+                  hotelName: widget.hotel.title,
+                  country: widget.hotel.location,
+                  departureDate: selectedRange.start.toIso8601String().split('T').first,
+                  returnDate: selectedRange.end.toIso8601String().split('T').first,
+                  nights: nights,
+                  roomTitle: widget.title,
+                  roomFeatures: widget.features.join(', '),
+                  roomPrice: widget.price,
+                  images: widget.images,
+                  fuelFee: 2000,
+                  serviceFee: 3000,
+                  extraNightsCost: extraNightsCost,
+                );
 
                 Navigator.push(
                   context,
