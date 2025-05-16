@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '/services/snack_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _SignUpScreen extends State<SignUpScreen> {
         passwordTextRepeatInputController.text) {
       SnackBarService.showSnackBar(
         context,
-        'Пароли должны совпадать',
+        'signup.passwords_do_not_match'.tr(),
         true,
       );
       return;
@@ -60,14 +61,14 @@ class _SignUpScreen extends State<SignUpScreen> {
       if (e.code == 'email-already-in-use') {
         SnackBarService.showSnackBar(
           context,
-          'Такой Email уже используется, повторите попытку с использованием другого Email',
+          'signup.email_already_in_use'.tr(),
           true,
         );
         return;
       } else {
         SnackBarService.showSnackBar(
           context,
-          'Неизвестная ошибка! Попробуйте еще раз или обратитесь в поддержку.',
+          'signup.unknown_error'.tr(),
           true,
         );
       }
@@ -81,7 +82,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Зарегистрироваться'),
+        title: Text('signup.title'.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -95,11 +96,11 @@ class _SignUpScreen extends State<SignUpScreen> {
                 controller: emailTextInputController,
                 validator: (email) =>
                     email != null && !EmailValidator.validate(email)
-                        ? 'Введите правильный Email'
+                        ? 'signup.enter_valid_email'.tr()
                         : null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Введите Email',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: 'signup.enter_email'.tr(),
                 ),
               ),
               const SizedBox(height: 30),
@@ -109,11 +110,11 @@ class _SignUpScreen extends State<SignUpScreen> {
                 obscureText: isHiddenPassword,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => value != null && value.length < 6
-                    ? 'Минимум 6 символов'
+                    ? 'signup.min_6_chars'.tr()
                     : null,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  hintText: 'Введите пароль',
+                  hintText: 'signup.enter_password'.tr(),
                   suffix: InkWell(
                     onTap: togglePasswordView,
                     child: Icon(
@@ -132,11 +133,11 @@ class _SignUpScreen extends State<SignUpScreen> {
                 obscureText: isHiddenPassword,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => value != null && value.length < 6
-                    ? 'Минимум 6 символов'
+                    ? 'signup.min_6_chars'.tr()
                     : null,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  hintText: 'Введите пароль еще раз',
+                  hintText: 'signup.enter_password_again'.tr(),
                   suffix: InkWell(
                     onTap: togglePasswordView,
                     child: Icon(
@@ -151,14 +152,14 @@ class _SignUpScreen extends State<SignUpScreen> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: signUp,
-                child: const Center(child: Text('Регистрация')),
+                child: Center(child: Text('signup.register'.tr())),
               ),
               const SizedBox(height: 30),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text(
-                  'Войти',
-                  style: TextStyle(
+                child: Text(
+                  'signup.sign_in'.tr(),
+                  style: const TextStyle(
                     decoration: TextDecoration.underline,
                   ),
                 ),

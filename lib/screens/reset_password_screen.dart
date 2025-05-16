@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,47 +18,46 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   void dispose() {
     emailTextInputController.dispose();
-
     super.dispose();
   }
 
   Future<void> resetPassword() async {
     final navigator = Navigator.of(context);
-    final scaffoldMassager = ScaffoldMessenger.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: emailTextInputController.text.trim());
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailTextInputController.text.trim(),
+      );
     } on FirebaseAuthException catch (e) {
       print(e.code);
 
       if (e.code == 'user-not-found') {
         SnackBarService.showSnackBar(
           context,
-          'Такой email незарегистрирован!',
+          'reset.email_not_registered'.tr(),
           true,
         );
         return;
       } else {
         SnackBarService.showSnackBar(
           context,
-          'Неизвестная ошибка! Попробуйте еще раз или обратитесь в поддержку.',
+          'reset.unknown_error'.tr(),
           true,
         );
         return;
       }
     }
 
-    const snackBar = SnackBar(
-      content: Text('Сброс пароля осуществен. Проверьте почту'),
+    final snackBar = SnackBar(
+      content: Text('reset.password_reset_success'.tr()),
       backgroundColor: Colors.green,
     );
 
-    scaffoldMassager.showSnackBar(snackBar);
-
+    scaffoldMessenger.showSnackBar(snackBar);
     navigator.pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
 
@@ -66,7 +66,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Сброс пароля'),
+        title: Text('reset.title'.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -80,17 +80,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 controller: emailTextInputController,
                 validator: (email) =>
                     email != null && !EmailValidator.validate(email)
-                        ? 'Введите правильный Email'
+                        ? 'reset.invalid_email'.tr()
                         : null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Введите Email',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: 'reset.enter_email'.tr(),
                 ),
               ),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: resetPassword,
-                child: const Center(child: Text('Сбросить пароль')),
+                child: Center(child: Text('reset.reset_password_button'.tr())),
               ),
             ],
           ),

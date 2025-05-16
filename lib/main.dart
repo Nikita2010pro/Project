@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '/screens/account_screen.dart';
 import '/screens/home_screen.dart';
 import '/screens/login_screen.dart';
@@ -26,7 +26,15 @@ Future<void> main() async {
         projectId: 'travel-agency-fd2cf',
             )
   );
-  runApp(const MyApp());
+  await EasyLocalization.ensureInitialized();
+    runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ru')],
+      path: 'assets/translations', // 👈 путь к переводам
+      fallbackLocale: const Locale('ru'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -41,6 +49,9 @@ class MyApp extends StatelessWidget {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
         }),
       ),
+      locale: context.locale, // 👈 добавить
+      supportedLocales: context.supportedLocales, // 👈 добавить
+      localizationsDelegates: context.localizationDelegates, // 👈 добавить
       routes: {
         '/': (context) => const FirebaseStream(),
         '/home': (context) => const HomeScreen(),

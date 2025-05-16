@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:project/models/hotel.dart';
 import 'package:project/models/room.dart';
 import 'package:project/models/room_card.dart';
@@ -29,7 +30,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
     try {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('hotels')
-          .doc(hotelId) // hotelId должен точно совпадать с ID документа в Firebase
+          .doc(hotelId)
           .collection('rooms')
           .get();
 
@@ -52,7 +53,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Выбор номера')),
+      appBar: AppBar(title: Text('room_selection.title'.tr())),
       body: FutureBuilder<List<Room>>(
         future: _roomsFuture,
         builder: (context, snapshot) {
@@ -61,13 +62,13 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
           }
           if (snapshot.hasError) {
             print("Ошибка загрузки номеров: ${snapshot.error}");
-            return const Center(child: Text('Ошибка загрузки номеров'));
+            return Center(child: Text('room_selection.error_loading'.tr()));
           }
 
           final rooms = snapshot.data ?? [];
 
           if (rooms.isEmpty) {
-            return const Center(child: Text('Нет доступных номеров'));
+            return Center(child: Text('room_selection.no_rooms'.tr()));
           }
 
           return ListView.builder(

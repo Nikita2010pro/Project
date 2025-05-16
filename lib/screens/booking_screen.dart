@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project/models/booking_data.dart';
@@ -49,16 +50,19 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<void> _submitBooking() async {
-    showDialog(
+    final confirmed = await showDialog<bool>(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.indigo,
-          size: 60,
-        ),
+      builder: (_) => AlertDialog(
+        title: Text('confirm_title'.tr()),
+        content: Text('confirm_message'.tr()),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text('Отмена')),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Да')),
+        ],
       ),
     );
+    if (confirmed != true) return;
+
 
   final firestore = FirebaseFirestore.instance;
 
@@ -82,12 +86,12 @@ class _BookingScreenState extends State<BookingScreen> {
 
     Navigator.of(context).pop(); // Закрыть лоадер
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Бронирование успешно сохранено в Firebase!')),
+      SnackBar(content: Text('booking_success'.tr())),
     );
   } catch (e) {
     Navigator.of(context).pop(); // Закрыть лоадер
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Ошибка при сохранении: $e')),
+      SnackBar(content: Text('booking_error: $e'.tr())),
     );
   } finally {
   }
@@ -99,7 +103,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Подтверждение бронирования'),
+        title: Text('submit_booking'.tr()),
         backgroundColor: Colors.indigo,
       ),
       body: Form(
@@ -125,20 +129,20 @@ class _BookingScreenState extends State<BookingScreen> {
               TotalCostSection(totalCost: booking.totalCost),
               const SizedBox(height: 24),
               // Контактная информация
-              Text('Контактная информация', style: headerStyle),
+              Text('contact_info'.tr(), style: headerStyle),
               const SizedBox(height: 8),
               // Телефон
               TextFormField(
                 controller: phoneController,
-                decoration: const InputDecoration(labelText: 'Телефон'),
-                validator: (value) => value == null || value.isEmpty ? 'Введите номер телефона' : null,
+                decoration: InputDecoration(labelText: 'phone'.tr()),
+                validator: (value) => value == null || value.isEmpty ? 'enter_number'.tr() : null,
                 keyboardType: TextInputType.phone,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               TextFormField(
                 controller: emailController,
-                decoration: const InputDecoration(labelText: 'Почта'),
-                validator: (value) => value == null || value.isEmpty ? 'Введите почту' : null,
+                decoration: InputDecoration(labelText: 'mail'.tr()),
+                validator: (value) => value == null || value.isEmpty ? 'enter_email'.tr() : null,
               ),
               const SizedBox(height: 16),
               // Туристы
@@ -146,7 +150,7 @@ class _BookingScreenState extends State<BookingScreen> {
               TextButton.icon(
                 onPressed: addTourist,
                 icon: const Icon(Icons.add),
-                label: const Text('Добавить туриста'),
+                label: Text('add_tourist'.tr()),
               ),
               const SizedBox(height: 16),
               ConfirmButton(onPressed: () async {
@@ -157,7 +161,7 @@ class _BookingScreenState extends State<BookingScreen> {
                     if (!isPassportUnique(tourist.passportNumber, i)) {
                       isValid = false;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Номер паспорта ${tourist.passportNumber} не уникален!')),
+                        SnackBar(content: Text('passport_not_unique'.tr(namedArgs: {'passport': tourist.passportNumber,})),),
                       );
                       break;
                     }
@@ -204,7 +208,7 @@ class _BookingScreenState extends State<BookingScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${index + 1}-й турист'),
+            Text('tourist_number'.tr(namedArgs: {'number': (index + 1).toString()})),
             if (index != 0)
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
@@ -218,19 +222,19 @@ class _BookingScreenState extends State<BookingScreen> {
         ),
         children: [
           TextFormField(
-            decoration: const InputDecoration(labelText: 'Имя'),
-            validator: (value) => value == null || value.isEmpty ? 'Введите имя' : null,
+            decoration: InputDecoration(labelText: 'first_name'.tr()),
+            validator: (value) => value == null || value.isEmpty ? 'enter_name'.tr() : null,
             onChanged: (v) => tourist.firstName = v,
           ),
           TextFormField(
-            decoration: const InputDecoration(labelText: 'Фамилия'),
-            validator: (value) => value == null || value.isEmpty ? 'Введите фамилию' : null,
+            decoration: InputDecoration(labelText: 'last_name'.tr()),
+            validator: (value) => value == null || value.isEmpty ? 'enter_last_name'.tr() : null,
             onChanged: (v) => tourist.lastName = v,
           ),
           Row(
             children: [
               Expanded(
-                child: Text('Дата рождения: ${tourist.birthDate != null ? DateFormat('dd.MM.yyyy').format(tourist.birthDate!) : 'Не выбрана'}'),
+                child: Text('birth_date'.tr(namedArgs: {'date': tourist.birthDate != null ? DateFormat('dd.MM.yyyy').format(tourist.birthDate!) : 'not_selected'.tr(),}),),
               ),
               IconButton(
                 icon: const Icon(Icons.calendar_today),
@@ -241,13 +245,13 @@ class _BookingScreenState extends State<BookingScreen> {
             ],
           ),
           TextFormField(
-            decoration: const InputDecoration(labelText: 'Гражданство'),
-            validator: (value) => value == null || value.isEmpty ? 'Введите гражданство' : null,
+            decoration: InputDecoration(labelText: 'citizenship'.tr()),
+            validator: (value) => value == null || value.isEmpty ? 'enter_citizenship'.tr() : null,
             onChanged: (v) => tourist.citizenship = v,
           ),
           TextFormField(
-            decoration: const InputDecoration(labelText: 'Номер загранпаспорта'),
-            validator: (value) => value == null || value.isEmpty ? 'Введите номер паспорта' : null,
+            decoration: InputDecoration(labelText: 'passport_number'.tr()),
+            validator: (value) => value == null || value.isEmpty ? 'enter_passport_number'.tr() : null,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (v) => tourist.passportNumber = v,
@@ -255,7 +259,7 @@ class _BookingScreenState extends State<BookingScreen> {
           Row(
             children: [
               Expanded(
-                child: Text('Срок действия загранпаспорта: ${tourist.passportExpiry != null ? DateFormat('dd.MM.yyyy').format(tourist.passportExpiry!) : 'Не выбран'}'),
+                child: Text('passport_expiry'.tr(namedArgs: {'date': tourist.passportExpiry != null ? DateFormat('dd.MM.yyyy').format(tourist.passportExpiry!) : 'not_selected'.tr(),}),),
               ),
               IconButton(
                 icon: const Icon(Icons.calendar_today),
@@ -292,9 +296,9 @@ class HotelInfoSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Отель: ${bookingData.hotelName}', style: headerStyle),
-            Text('Город: ${bookingData.country}', style: subHeaderStyle),
-            Text('Даты: ${bookingData.departureDate} - ${bookingData.returnDate} (${bookingData.nights} ночей)', style: subHeaderStyle),
+            Text('hotel_name'.tr(namedArgs: {'hotelName': bookingData.hotelName}), style: headerStyle),
+            Text('city'.tr(namedArgs: {'city': bookingData.country}), style: subHeaderStyle),
+            Text('date_range'.tr(namedArgs: {'from': bookingData.departureDate,'to': bookingData.returnDate,'nights': bookingData.nights.toString(),}),style: subHeaderStyle),
           ],
         ),
       ),
@@ -338,9 +342,9 @@ class RoomDetailsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Номер: ${bookingData.roomTitle}', style: subHeaderStyle),
-        Text('Особенности: ${bookingData.roomFeatures}', style: subHeaderStyle),
-        Text('Цена номера: ${bookingData.roomPrice.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+        Text('room_number'.tr(namedArgs: {'room': bookingData.roomTitle}), style: subHeaderStyle),
+        Text('features'.tr(namedArgs: {'features': bookingData.roomFeatures}), style: subHeaderStyle),
+        Text('room_price'.tr(namedArgs: {'price': bookingData.roomPrice.toStringAsFixed(0),}), style: subHeaderStyle),
       ],
     );
   }
@@ -357,10 +361,10 @@ class AdditionalFeesSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Топливо: ${bookingData.fuelFee.toStringAsFixed(0)} ₽', style: subHeaderStyle),
-        Text('Обслуживание: ${bookingData.serviceFee.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+        Text('fuel_fee'.tr(namedArgs: {'amount': bookingData.fuelFee.toStringAsFixed(0)}), style: subHeaderStyle),
+        Text('service_fee'.tr(namedArgs: {'amount': bookingData.serviceFee.toStringAsFixed(0)}), style: subHeaderStyle),
         if (bookingData.extraNightsCost > 0)
-          Text('Дополнительные дни: ${bookingData.extraNightsCost.toStringAsFixed(0)} ₽', style: subHeaderStyle),
+          Text('extra_nights'.tr(namedArgs: {'amount': bookingData.extraNightsCost.toStringAsFixed(0)}), style: subHeaderStyle),
       ],
     );
   }
@@ -376,7 +380,7 @@ class TotalCostSection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Итого', style: headerStyle),
+        Text('total'.tr(), style: headerStyle),
         Text('${totalCost.toStringAsFixed(0)} ₽', style: costTextStyle),
       ],
     );
@@ -396,7 +400,7 @@ class ConfirmButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      child: const Text('Подтвердить бронирование'),
+      child: Text('submit_booking'.tr()),
     );
   }
 }

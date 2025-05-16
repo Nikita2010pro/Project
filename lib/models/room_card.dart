@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/models/booking_data.dart';
 import 'package:project/models/hotel.dart';
@@ -86,7 +87,7 @@ class _RoomCardState extends State<RoomCard> {
                     },
                   ),
                 )
-              : const Center(child: Text('Нет изображений')),
+              : Center(child: Text('no_images').tr()),
           const SizedBox(height: 12),
 
           // Название
@@ -120,7 +121,7 @@ class _RoomCardState extends State<RoomCard> {
               _showDetails ? Icons.expand_less : Icons.info_outline,
               size: 18,
             ),
-            label: Text(_showDetails ? 'Скрыть описание' : 'Подробнее о номере'),
+            label: Text(_showDetails ? 'hide_description'.tr() : 'more_about_room'.tr()),
             style: TextButton.styleFrom(
               foregroundColor: Colors.blue,
               padding: EdgeInsets.zero,
@@ -142,13 +143,10 @@ class _RoomCardState extends State<RoomCard> {
 
           // Цена
           Text(
-            'от ${widget.price.toStringAsFixed(0)} ₽',
+            'from_price'.tr(args: [widget.price.toStringAsFixed(0)]),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const Text(
-            'За 7 ночей с перелетом',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
+          Text('for_7_nights_with_flight',style: TextStyle(color: Colors.grey, fontSize: 13),).tr(),
           const SizedBox(height: 12),
 
           // Кнопка выбора
@@ -193,7 +191,7 @@ class _RoomCardState extends State<RoomCard> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Выбрать номер'),
+              child: Text('select_room').tr(),
             ),
           ),
         ],

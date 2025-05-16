@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '/screens/home_screen.dart';
 import '/services/snack_bar.dart';
 
@@ -64,8 +65,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       if (mounted) {
         SnackBarService.showSnackBar(
           context,
-          '$e',
-          //'Неизвестная ошибка! Попробуйте еще раз или обратитесь в поддержку.',
+          'verifyEmail.unknown_error'.tr(),
           true,
         );
       }
@@ -78,7 +78,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       : Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: const Text('Верификация Email адреса'),
+            title: Text('verifyEmail.title'.tr()),
           ),
           body: SafeArea(
             child: Padding(
@@ -86,9 +86,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Письмо с подтверждением было отправлено на вашу электронную почту.',
-                    style: TextStyle(
+                  Text(
+                    'verifyEmail.email_sent_message'.tr(),
+                    style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
@@ -96,7 +96,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   ElevatedButton.icon(
                     onPressed: canResendEmail ? sendVerificationEmail : null,
                     icon: const Icon(Icons.email),
-                    label: const Text('Повторно отправить'),
+                    label: Text('verifyEmail.resend'.tr()),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
@@ -104,9 +104,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       timer?.cancel();
                       await FirebaseAuth.instance.currentUser!.delete();
                     },
-                    child: const Text(
-                      'Отменить',
-                      style: TextStyle(
+                    child: Text(
+                      'verifyEmail.cancel'.tr(),
+                      style: const TextStyle(
                         color: Colors.blue,
                       ),
                     ),

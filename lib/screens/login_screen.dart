@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -41,18 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        SnackBarService.showSnackBar(
-          context,
-          'Неправильный email или пароль. Повторите попытку',
-          true,
-        );
+       SnackBarService.showSnackBar(context,'invalid_email_or_password'.tr(),true,);
         return;
       } else {
-        SnackBarService.showSnackBar(
-          context,
-          'Неизвестная ошибка! Попробуйте еще раз или обратитесь в поддержку.',
-          true,
-        );
+        SnackBarService.showSnackBar(context,'unknown_error'.tr(),true,);
         return;
       }
     }
@@ -91,8 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 key: formKey,
                 child: Column(
                   children: [
-                    const Text(
-                      'С возвращением в EasyTrip!',
+                    Text(
+                      'welcome_back'.tr(),
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -105,9 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
                       controller: emailTextInputController,
-                      validator: (email) =>
+                        validator: (email) =>
                           email != null && !EmailValidator.validate(email)
-                              ? 'Введите правильный Email'
+                              ? 'enter_valid_email'.tr()
                               : null,
                       decoration: InputDecoration(
                         filled: true,
@@ -116,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        hintText: 'Введите Email',
+                        hintText: 'enter_email'.tr(),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -125,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: passwordTextInputController,
                       obscureText: isHiddenPassword,
                       validator: (value) => value != null && value.length < 6
-                          ? 'Минимум 6 символов'
+                          ? 'min_6_chars'.tr()
                           : null,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       decoration: InputDecoration(
@@ -143,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        hintText: 'Введите пароль',
+                        hintText: 'enter_password'.tr(),
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -158,8 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          'Войти',
+                        child: Text(
+                          'Enter'.tr(),
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
@@ -168,8 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: () =>
                           Navigator.of(context).pushNamed('/reset_password'),
-                      child: const Text(
-                        'Забыли пароль?',
+                      child: Text(
+                        'forgot_your_password'.tr(),
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -177,15 +170,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Нет аккаунта?',
+                        Text(
+                          'no_account'.tr(),
                           style: TextStyle(color: Colors.white),
                         ),
                         TextButton(
                           onPressed: () =>
                               Navigator.of(context).pushNamed('/signup'),
-                          child: const Text(
-                            'Регистрация',
+                          child: Text(
+                            'registration'.tr(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,

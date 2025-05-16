@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project/models/hotel.dart';
@@ -15,10 +16,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Главная страница',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text('home_page'.tr(), style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.lightBlue.shade700,
         actions: [
           IconButton(
@@ -47,7 +45,8 @@ class HomeScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print('Firestore error: ${snapshot.error}');
-            return const Center(child: Text('Ошибка загрузки данных.'));
+            return Center(child: Text('error_loading_data'.tr())
+);
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -57,7 +56,7 @@ class HomeScreen extends StatelessWidget {
           final docs = snapshot.data!.docs;
 
           if (docs.isEmpty) {
-            return const Center(child: Text('Отели не найдены.'));
+            return Center(child: Text('hotels_not_found'.tr()));
           }
 
           return ListView.builder(

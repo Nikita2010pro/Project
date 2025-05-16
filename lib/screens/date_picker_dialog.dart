@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<DateTimeRange?> showDateRangePickerDialog(BuildContext context) async {
@@ -29,12 +30,12 @@ Future<DateTimeRange?> showDateRangePickerDialog(BuildContext context) async {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Недопустимый диапазон'),
-        content: const Text('Минимальное количество ночей — 7. Пожалуйста, выберите другой диапазон.'),
+        title: Text('invalid_range'.tr()),
+        content: Text('min_nights_error'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Ок'),
+            child: Text('Ок'),
           ),
         ],
       ),

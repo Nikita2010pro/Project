@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../models/hotel.dart';
 import 'package:project/screens/room_selection_screen.dart';
@@ -10,7 +11,7 @@ class HotelDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Информация об отеле')),
+      appBar: AppBar(title: Text('hotel_info'.tr())),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,10 +47,7 @@ class HotelDetailScreen extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 20),
                       const SizedBox(width: 4),
-                      Text(
-                        '${tour.rating} Превосходно',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                      ),
+                      Text('${tour.rating} ${'excellent'.tr()}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -75,12 +73,9 @@ class HotelDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'от ${tour.price.toStringAsFixed(0)} ₽',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
+                    Text('${'from'.tr()} ${tour.price.toStringAsFixed(0)} ${'currency_ruble'.tr()}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 4),
-                    const Text('за тур с перелётом', style: TextStyle(fontSize: 13)),
+                    Text('per_tour_with_flight'.tr(), style: TextStyle(fontSize: 13)),
                   ],
                 ),
               ),
@@ -95,7 +90,7 @@ class HotelDetailScreen extends StatelessWidget {
                 spacing: 16,
                 runSpacing: 12,
                 children: [
-                  _buildInfoChip(Icons.map, tour.features.isNotEmpty ? tour.features[0] : 'Инфо'),
+                  _buildInfoChip(Icons.map, tour.features.isNotEmpty ? tour.features[0] : 'info'.tr()),
                   if (tour.features.length > 1) _buildInfoChip(Icons.wifi, tour.features[1]),
                   _buildInfoChip(Icons.flight_takeoff, tour.airportDistance),
                   _buildInfoChip(Icons.beach_access, tour.beachDistance),
@@ -111,10 +106,7 @@ class HotelDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Об отеле',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                  Text('about_hotel'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Text(
                     tour.description,
@@ -130,19 +122,20 @@ class HotelDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Column(
-                children: const [
+                children: [
                   ExpansionTile(
-                    title: Text('Удобства'),
-                    children: [ListTile(title: Text('Самое необходимое'))],
+                    title: Text('amenities'.tr()),
+                    children: [ListTile(title: Text('basics'.tr()))],
                   ),
                   ExpansionTile(
-                    title: Text('Что включено'),
-                    children: [ListTile(title: Text('Перелёт, трансфер, питание'))],
+                    title: Text('included'.tr()),
+                    children: [ListTile(title: Text('flight_transfer_meals'.tr()))],
                   ),
                   ExpansionTile(
-                    title: Text('Что не включено'),
-                    children: [ListTile(title: Text('Экскурсии и доп.услуги'))],
+                    title: Text('not_included'.tr()),
+                    children: [ListTile(title: Text('excursions_additional_services'.tr()))],
                   ),
+
                 ],
               ),
             ),
@@ -170,10 +163,7 @@ class HotelDetailScreen extends StatelessWidget {
   ),
 );
           },
-          child: const Text(
-            'К выбору номера',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
+          child: Text('to_room_selection'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         ),
       ),
     );
