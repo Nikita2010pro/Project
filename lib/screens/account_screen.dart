@@ -15,10 +15,44 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<void> signOut() async {
     final navigator = Navigator.of(context);
-
     await FirebaseAuth.instance.signOut();
-
     navigator.pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+  }
+
+  void _showEditNameDialog() {
+    final TextEditingController _nameController =
+        TextEditingController(text: user?.displayName ?? '');
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('edit_name'.tr()),
+          content: TextField(
+            controller: _nameController,
+            decoration: InputDecoration(hintText: 'enter_new_name'.tr()),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('cancel'.tr()),
+            ),
+            TextButton(
+              onPressed: () async {
+                final newName = _nameController.text.trim();
+                if (newName.isNotEmpty && newName != user?.displayName) {
+                  await user?.updateDisplayName(newName);
+                  await user?.reload();
+                  setState(() {});
+                }
+                Navigator.of(context).pop();
+              },
+              child: Text('save'.tr()),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -53,11 +87,22 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              user?.displayName ?? 'no_name'.tr(),
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  user?.displayName ?? 'no_name'.tr(),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.edit, size: 20),
+                  tooltip: 'edit_name'.tr(),
+                  onPressed: () => _showEditNameDialog(),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             Text(
@@ -95,7 +140,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     leading: const Icon(Icons.calendar_today),
                     title: Text('registration_date'.tr()),
                     subtitle: Text(
-                      user?.metadata.creationTime?.toLocal().toString().split(' ').first ?? 'unknown'.tr(),
+                      user?.metadata.creationTime?.toLocal().toString().split(' ').first ??
+                          'unknown'.tr(),
                     ),
                   ),
                 ],

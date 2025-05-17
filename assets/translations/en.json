@@ -131,7 +131,10 @@
   "not_logged_in": "Not logged in",
   "no_bookings": "You don't have any reservations yet",
   "date": "date",
-  "no_date": "Date unknown"
+  "no_date": "Date unknown",
+  "edit_name": "Edit name",
+  "enter_new_name": "Enter new name",
+  "save": "Save"
 
 
 }
