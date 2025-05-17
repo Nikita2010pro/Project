@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:project/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -13,24 +15,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
     String currentLanguage = context.locale.languageCode == 'ru' ? 'Русский' : 'English';
 
     return Scaffold(
       appBar: AppBar(
         title: Text('settings'.tr()),
       ),
-      body: ListView(
-        children: [
-          SwitchListTile(
-            title: Text('dark_mode'.tr()),
-            value: isDarkMode,
-            onChanged: (value) {
-              setState(() {
-                isDarkMode = value;
-              });
-              // TODO: применить тему через Provider/BLoC если нужно
-            },
-            secondary: const Icon(Icons.dark_mode),
+    body: ListView(
+      children: [
+        SwitchListTile(
+          title: Text('dark_mode'.tr()),
+          value: isDarkMode,
+          onChanged: (value) => themeProvider.toggleTheme(value),
+          secondary: const Icon(Icons.dark_mode),
           ),
           const Divider(),
           ListTile(

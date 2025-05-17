@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:project/theme_provider.dart';
+import 'package:provider/provider.dart';
 import '/screens/account_screen.dart';
 import '/screens/home_screen.dart';
 import '/screens/login_screen.dart';
@@ -27,12 +29,15 @@ Future<void> main() async {
             )
   );
   await EasyLocalization.ensureInitialized();
-    runApp(
+  runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ru')],
-      path: 'assets/translations', // 👈 путь к переводам
+      path: 'assets/translations',
       fallbackLocale: const Locale('ru'),
-      child: const MyApp(),
+      child: ChangeNotifierProvider( // 👈 оберни в ChangeNotifierProvider
+        create: (_) => ThemeProvider(),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -42,16 +47,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      themeMode: themeProvider.themeMode, // 👈 управление темой
       theme: ThemeData(
-        pageTransitionsTheme: const PageTransitionsTheme(builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-        }),
+        brightness: Brightness.light,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          },
+        ),
       ),
-      locale: context.locale, // 👈 добавить
-      supportedLocales: context.supportedLocales, // 👈 добавить
-      localizationsDelegates: context.localizationDelegates, // 👈 добавить
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          },
+        ),
+      ),
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
       routes: {
         '/': (context) => const FirebaseStream(),
         '/home': (context) => const HomeScreen(),
