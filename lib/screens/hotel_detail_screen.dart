@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:project/screens/hotel_map_screen.dart';
 import '../models/hotel.dart';
 import 'package:project/screens/room_selection_screen.dart';
 
@@ -58,6 +59,30 @@ class HotelDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => HotelMapScreen(
+                          latitude: tour.latitude,
+                          longitude: tour.longitude,
+                          hotelName: tour.title,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.map),
+                  label: Text('view_on_the_map'.tr()),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ),
 
             const SizedBox(height: 16),
 

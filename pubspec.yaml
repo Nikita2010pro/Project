@@ -41,6 +41,9 @@ dependencies:
   cloud_firestore: ^5.6.7
   loading_animation_widget: ^1.2.0
   easy_localization: ^3.0.1
+  yandex_mapkit: ^3.3.3
+  flutter_map: ^6.0.0
+  latlong2: ^0.9.0
 
 dev_dependencies:
   flutter_test:

@@ -125,7 +125,9 @@
   "more_about_room": "More about the room",
   "from_price": "from {} ₽",
   "for_7_nights_with_flight": "For 7 nights with flight",
-  "select_room": "Select room"
+  "select_room": "Select room",
+  "on_the_map": "On the map",
+  "view_on_the_map": "View on the map"
 
 
 }

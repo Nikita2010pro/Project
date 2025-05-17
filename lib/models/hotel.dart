@@ -9,6 +9,8 @@ class Hotel {
   final String airportDistance;
   final String beachDistance;
   final List<String> features;
+  final double latitude;
+  final double longitude;
 
   Hotel({
     required this.id,
@@ -21,6 +23,8 @@ class Hotel {
     required this.airportDistance,
     required this.beachDistance,
     required this.features,
+    required this.latitude,
+    required this.longitude,
   });
 
 
@@ -36,6 +40,8 @@ factory Hotel.fromFirestore(Map<String, dynamic> data, String id) {
       airportDistance: data['airportDistance'] ?? '',
       beachDistance: data['beachDistance'] ?? '',
       features: List<String>.from(data['features'] ?? []),
+      latitude: (data['latitude'] ?? 0.0).toDouble(),
+      longitude: (data['longitude'] ?? 0.0).toDouble(),
     );
   }
 }

@@ -75,6 +75,8 @@ class HomeScreen extends StatelessWidget {
                 features: List<String>.from(doc['features'] ?? []),
                 airportDistance: doc['airportDistance'],
                 beachDistance: doc['beachDistance'],
+                latitude: double.tryParse(doc['latitude'].toString()) ?? 0.0,
+                longitude: double.tryParse(doc['longitude'].toString()) ?? 0.0,
               );
 
               return GestureDetector(

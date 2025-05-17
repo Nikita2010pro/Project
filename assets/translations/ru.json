@@ -125,7 +125,9 @@
   "more_about_room": "Подробнее о номере",
   "from_price": "от {} ₽",
   "for_7_nights_with_flight": "За 7 ночей с перелетом",
-  "select_room": "Выбрать номер"
+  "select_room": "Выбрать номер",
+  "on_the_map": "На карте",
+  "view_on_the_map": "Посмотреть на карте"
 
 
 }
