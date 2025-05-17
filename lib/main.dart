@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:project/screens/my_bookings_screen.dart';
 import 'package:project/theme_provider.dart';
 import 'package:provider/provider.dart';
 import '/screens/account_screen.dart';
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const SignUpScreen(),
         '/reset_password': (context) => const ResetPasswordScreen(),
         '/verify_email': (context) => const VerifyEmailScreen(),
+        '/my_bookings': (context) => const MyBookingsScreen()
       },
       initialRoute: '/',
     );

@@ -127,7 +127,11 @@
   "for_7_nights_with_flight": "For 7 nights with flight",
   "select_room": "Select room",
   "on_the_map": "On the map",
-  "view_on_the_map": "View on the map"
+  "view_on_the_map": "View on the map",
+  "not_logged_in": "Not logged in",
+  "no_bookings": "You don't have any reservations yet",
+  "date": "date",
+  "no_date": "Date unknown"
 
 
 }

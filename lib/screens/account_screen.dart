@@ -75,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     title: Text('my_bookings'.tr()),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
-                      // TODO: Навигация на экран бронирований
+                      Navigator.pushNamed(context, '/my_bookings');
                     },
                   ),
                   const Divider(),

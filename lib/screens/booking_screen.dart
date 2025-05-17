@@ -6,6 +6,7 @@ import 'package:project/models/tourist.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BookingScreen extends StatefulWidget {
   final BookingData bookingData;
@@ -65,11 +66,20 @@ class _BookingScreenState extends State<BookingScreen> {
 
 
   final firestore = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser;
+
+  if (user == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Пользователь не авторизован')),
+    );
+    return;
+  }
 
   try {
     final bookingDoc = await firestore.collection('bookings').add({
       'phone': phoneController.text,
       'email': emailController.text,
+      'userId': user.uid,
       'createdAt': FieldValue.serverTimestamp(),
     });
 
