@@ -15,7 +15,7 @@
   "sign_out": "Sign out",
   "select_language": "Select Language",
   "about_app": "About App",
-  "version": "Version {{0}}",
+  "version": "Version {1.0.0}",
   "all_rights_reserved": "All rights reserved",
   "booking_confirmation": "Booking Confirmation",
   "confirm_title": "Confirmation",
@@ -27,10 +27,10 @@
   "add_tourist": "Add Tourist",
   "first_name": "First Name",
   "last_name": "Last Name",
-  "birth_date": "Date of Birth:",
+  "birth_date": "Date of Birth: {date}",
   "citizenship": "Citizenship",
   "passport_number": "Passport Number",
-  "passport_expiry": "Passport Expiry Date:",
+  "passport_expiry": "Passport Expiry Date:  {date}",
   "submit_booking": "Confirm Booking",
   "hotel_name": "Hotel: {hotelName}",
   "city": "City: {city}",
@@ -134,7 +134,28 @@
   "no_date": "Date unknown",
   "edit_name": "Edit name",
   "enter_new_name": "Enter new name",
-  "save": "Save"
+  "save": "Save",
+
+  "bookingDetails": {
+    "booking_details": "Booking Details",
+    "email": "Email",
+    "booking_date": "Booking Date",
+    "hotel": "Hotel",
+    "room_type": "Room Type",
+    "total_cost": "Total Cost",
+    "error_loading_tourists": "Error loading tourists",
+    "no_tourists": "No tourists specified",
+    "select_tourist": "Select a tourist",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "birth_date": "Birth Date",
+    "citizenship": "Citizenship",
+    "passport_number": "Passport Number",
+    "passport_expiry": "Passport Expiry",
+    "not_specified": "Not specified",
+    "no_date": "No date"
+  }
+
 
 
 }

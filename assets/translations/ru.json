@@ -15,7 +15,7 @@
   "sign_out": "Выйти из аккаунта",
   "select_language": "Выберите язык",
   "about_app": "О приложении",
-  "version": "Версия {{0}}",
+  "version": "Версия {1.0.0}",
   "all_rights_reserved": "Все права защищены",
   "booking_confirmation": "Подтверждение бронирования",
   "confirm_title": "Подтверждение",
@@ -27,10 +27,10 @@
   "add_tourist": "Добавить туриста",
   "first_name": "Имя",
   "last_name": "Фамилия",
-  "birth_date": "Дата рождения:",
+  "birth_date": "Дата рождения: {date}",
   "citizenship": "Гражданство",
   "passport_number": "Номер загранпаспорта",
-  "passport_expiry": "Срок действия загранпаспорта: {{date}}",
+  "passport_expiry": "Срок действия загранпаспорта: {date}",
   "submit_booking": "Подтвердить бронирование",
   "hotel_name": "Отель: {hotelName}",
   "city": "Город: {city}",
@@ -134,7 +134,28 @@
   "no_date": "Дата неизвестна",
   "edit_name": "Изменить имя",
   "enter_new_name": "Введите новое имя",
-  "save": "Сохранить"
+  "save": "Сохранить",
+
+  "bookingDetails": {
+    "booking_details": "Детали бронирования",
+    "email": "Email",
+    "booking_date": "Дата бронирования",
+    "hotel": "Отель",
+    "room_type": "Тип номера",
+    "total_cost": "Общая цена",
+    "error_loading_tourists": "Ошибка загрузки туристов",
+    "no_tourists": "Туристы не указаны",
+    "select_tourist": "Выберите туриста",
+    "first_name": "Имя",
+    "last_name": "Фамилия",
+    "birth_date": "Дата рождения",
+    "citizenship": "Гражданство",
+    "passport_number": "Номер паспорта",
+    "passport_expiry": "Срок действия паспорта",
+    "not_specified": "Не указано",
+    "no_date": "Нет даты"
+  }
+
 
 
 }

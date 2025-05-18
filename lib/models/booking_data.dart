@@ -13,6 +13,7 @@ class BookingData {
   final double fuelFee;
   final double serviceFee;
  final int extraNightsCost;
+ 
 
 
   BookingData({

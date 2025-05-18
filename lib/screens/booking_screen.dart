@@ -81,16 +81,19 @@ class _BookingScreenState extends State<BookingScreen> {
       'email': emailController.text,
       'userId': user.uid,
       'createdAt': FieldValue.serverTimestamp(),
+      'hotelTitle': widget.bookingData.hotelName,           // Название отеля
+      'roomTitle': widget.bookingData.roomTitle,             // Название номера
+      'totalCost': widget.bookingData.totalCost.toString(),  // Общая стоимость
     });
 
     for (final tourist in tourists) {
       await bookingDoc.collection('tourists').add({
         'firstName': tourist.firstName,
         'lastName': tourist.lastName,
-        'birthDate': tourist.birthDate?.toIso8601String(),
+        'birthDate': tourist.birthDate,
         'citizenship': tourist.citizenship,
         'passportNumber': tourist.passportNumber,
-        'passportExpiry': tourist.passportExpiry?.toIso8601String(),
+        'passportExpiry': tourist.passportExpiry,
       });
     }
 
@@ -152,7 +155,8 @@ class _BookingScreenState extends State<BookingScreen> {
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'mail'.tr()),
-                validator: (value) => value == null || value.isEmpty ? 'enter_email'.tr() : null,
+                validator: (value) {if (value == null || value.isEmpty) return 'enter_email'.tr(); final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                if (!emailRegex.hasMatch(value)) return 'invalid_email'.tr(); return null;},
               ),
               const SizedBox(height: 16),
               // Туристы
