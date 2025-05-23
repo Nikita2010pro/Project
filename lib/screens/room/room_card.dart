@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project/models/booking_data.dart';
 import 'package:project/models/hotel.dart';
-import 'package:project/screens/booking_screen.dart';
-import 'package:project/screens/date_picker_dialog.dart';
+import 'package:project/screens/booking/booking_screen.dart';
+import 'package:project/screens/booking/date_picker_dialog.dart';
 
 
 class RoomCard extends StatefulWidget {

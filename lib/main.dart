@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:project/screens/my_bookings_screen.dart';
+import 'package:project/screens/account/my_bookings_screen.dart';
 import 'package:project/theme_provider.dart';
 import 'package:provider/provider.dart';
-import '/screens/account_screen.dart';
-import '/screens/home_screen.dart';
-import '/screens/login_screen.dart';
-import '/screens/reset_password_screen.dart';
-import '/screens/signup_screen.dart';
-import '/screens/verify_email_screen.dart';
+import 'screens/account/account_screen.dart';
+import 'screens/hotel/home_screen.dart';
+import 'screens/login/login_screen.dart';
+import 'screens/login/reset_password_screen.dart';
+import 'screens/login/signup_screen.dart';
+import 'screens/login/verify_email_screen.dart';
 import '/services/firebase_streem.dart';
 
 // Firebase Авторизация - Сценарии:

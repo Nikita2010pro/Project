@@ -3,9 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project/models/hotel.dart';
-import 'package:project/screens/hotel_detail_screen.dart';
-import '/screens/account_screen.dart';
-import '/screens/login_screen.dart';
+import 'package:project/screens/hotel/hotel_detail_screen.dart';
+import '../account/account_screen.dart';
+import '../login/login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

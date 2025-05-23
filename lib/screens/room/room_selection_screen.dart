@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:project/models/hotel.dart';
 import 'package:project/models/room.dart';
-import 'package:project/models/room_card.dart';
+import 'package:project/screens/room/room_card.dart';
 
 class RoomSelectionScreen extends StatefulWidget {
   final Hotel hotel;
