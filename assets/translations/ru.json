@@ -154,8 +154,17 @@
     "passport_expiry": "Срок действия паспорта",
     "not_specified": "Не указано",
     "no_date": "Нет даты"
-  }
+  },
 
+  "bookingScreen": {
+    "delete_booking": "Удалить бронь",
+    "confirm_delete_booking": "Вы уверены, что хотите удалить эту бронь?",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "booking_deleted": "Бронь удалена"
+  },
+    "confirm_sign_out": "Подтверждение выхода",
+  "are_you_sure_sign_out": "Вы уверены, что хотите выйти?"
 
 
 }

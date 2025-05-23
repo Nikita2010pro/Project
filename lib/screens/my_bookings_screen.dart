@@ -19,9 +19,9 @@ class MyBookingsScreen extends StatelessWidget {
       );
     }
 
-final bookingsRef = FirebaseFirestore.instance
-    .collection('bookings')
-    .where('userId', isEqualTo: user.uid);
+    final bookingsRef = FirebaseFirestore.instance
+        .collection('bookings')
+        .where('userId', isEqualTo: user.uid);
 
     return Scaffold(
       appBar: AppBar(title: Text('my_bookings'.tr())),
@@ -43,6 +43,7 @@ final bookingsRef = FirebaseFirestore.instance
             itemBuilder: (context, index) {
               final booking = bookings[index];
               final createdAt = (booking['createdAt'] as Timestamp?)?.toDate();
+
               return Card(
                 margin: const EdgeInsets.all(8),
                 child: ListTile(
@@ -52,16 +53,45 @@ final bookingsRef = FirebaseFirestore.instance
                       : 'no_date'.tr()),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BookingDetailsScreen(
-                        booking: booking.data() as Map<String, dynamic>,
-                        bookingId: booking.id,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookingDetailsScreen(
+                          booking: booking.data() as Map<String, dynamic>,
+                          bookingId: booking.id,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                  onLongPress: () async {
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('bookingScreen.delete_booking'.tr()),
+                        content: Text('bookingScreen.confirm_delete_booking'.tr()),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text('bookingScreen.cancel'.tr()),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: Text('bookingScreen.delete'.tr()),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (confirm == true) {
+                      await FirebaseFirestore.instance
+                          .collection('bookings')
+                          .doc(booking.id)
+                          .delete();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('bookingScreen.booking_deleted'.tr())),
+                      );
+                    }
+                  },
                 ),
               );
             },

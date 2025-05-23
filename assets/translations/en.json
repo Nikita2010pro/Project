@@ -154,8 +154,18 @@
     "passport_expiry": "Passport Expiry",
     "not_specified": "Not specified",
     "no_date": "No date"
-  }
+  },
 
+  "bookingScreen": {
+    "delete_booking": "Delete a reservation",
+    "confirm_delete_booking": "Are you sure you want to delete this reservation?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "booking_deleted": "Reservation deleted"
+  },
+  
+  "confirm_sign_out": "Confirm Sign Out",
+  "are_you_sure_sign_out": "Are you sure you want to sign out?"
 
 
 }

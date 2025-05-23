@@ -13,10 +13,31 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
-  Future<void> signOut() async {
-    final navigator = Navigator.of(context);
-    await FirebaseAuth.instance.signOut();
-    navigator.pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+  void _confirmSignOut() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('confirm_sign_out'.tr()),
+          content: Text('are_you_sure_sign_out'.tr()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('cancel'.tr()),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Закрыть диалог
+                final navigator = Navigator.of(context);
+                await FirebaseAuth.instance.signOut();
+                navigator.pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+              },
+              child: Text('yes'.tr()),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showEditNameDialog() {
@@ -65,13 +86,7 @@ class _AccountScreenState extends State<AccountScreen> {
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: Text('account'.tr()),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'logout'.tr(),
-            onPressed: () => signOut(),
-          ),
-        ],
+        // Удалена кнопка выхода сверху
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -149,7 +164,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             const Spacer(),
             ElevatedButton.icon(
-              onPressed: () => signOut(),
+              onPressed: () => _confirmSignOut(),
               icon: const Icon(Icons.logout),
               label: Text('sign_out'.tr()),
               style: ElevatedButton.styleFrom(
