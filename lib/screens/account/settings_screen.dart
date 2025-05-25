@@ -11,48 +11,109 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool isDarkMode = false;
-
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.isDarkMode;
-    String currentLanguage = context.locale.languageCode == 'ru' ? 'Русский' : 'English';
+    final currentLanguage = context.locale.languageCode == 'ru' ? 'Русский' : 'English';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('settings'.tr()),
+        title: Text('settings'.tr(),
+        style: TextStyle(
+            fontFamily: 'Pacifico',
+            fontSize: 26,
+            color: Theme.of(context).colorScheme.onBackground,
+            shadows: [
+              const Shadow(blurRadius: 4, offset: Offset(1, 1), color: Colors.black45),
+            ],
+          ),
+          ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-    body: ListView(
-      children: [
-        SwitchListTile(
-          title: Text('dark_mode'.tr()),
-          value: isDarkMode,
-          onChanged: (value) => themeProvider.toggleTheme(value),
-          secondary: const Icon(Icons.dark_mode),
+      body: Stack(
+        children: [
+          // 🔹 Фон на весь экран
+          Positioned.fill(
+            child: Image.asset(
+              isDark ? 'assets/images/background_dark.jpg' : 'assets/images/background.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: Text('language'.tr()),
-            subtitle: Text(currentLanguage),
-            onTap: () {
-              _showLanguageDialog();
-            },
+          // 🔹 Затемнение
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(isDark ? 0.6 : 0.3),
+            ),
           ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text('about_app'.tr()),
-            subtitle: Text('version'.tr(args: ['1.0.0'])),
-            onTap: () {
-              showAboutDialog(
-                context: context,
-                applicationName: 'Travel App',
-                applicationVersion: '1.0.0',
-                applicationLegalese: '© 2025 ' + 'all_rights_reserved'.tr(),
-              );
-            },
+          // 🔹 Контент
+          SafeArea(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 8,
+                        color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+                        child: Column(
+                          children: [
+                            SwitchListTile(
+                              title: Text(
+                                'dark_mode'.tr(),
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              value: isDarkMode,
+                              onChanged: (value) => themeProvider.toggleTheme(value),
+                              secondary: const Icon(Icons.dark_mode),
+                            ),
+                            const Divider(height: 0),
+                            ListTile(
+                              leading: const Icon(Icons.language),
+                              title: Text(
+                                'language'.tr(),
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              subtitle: Text(currentLanguage),
+                              onTap: _showLanguageDialog,
+                            ),
+                            const Divider(height: 0),
+                            ListTile(
+                              leading: const Icon(Icons.info_outline),
+                              title: Text(
+                                'about_app'.tr(),
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              subtitle: Text('version'.tr(args: ['1.0.0'])),
+                              onTap: () {
+                                showAboutDialog(
+                                  context: context,
+                                  applicationName: 'Travel App',
+                                  applicationVersion: '1.0.0',
+                                  applicationLegalese: '© 2025 ' + 'all_rights_reserved'.tr(),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -63,6 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text('select_language'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -72,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () {
                 context.setLocale(const Locale('ru'));
                 Navigator.pop(context);
-                setState(() {}); // обновить UI
+                setState(() {});
               },
             ),
             ListTile(

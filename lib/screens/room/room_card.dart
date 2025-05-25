@@ -5,7 +5,6 @@ import 'package:project/models/hotel.dart';
 import 'package:project/screens/booking/booking_screen.dart';
 import 'package:project/screens/booking/date_picker_dialog.dart';
 
-
 class RoomCard extends StatefulWidget {
   final Hotel hotel;
   final String title;
@@ -46,40 +45,44 @@ class _RoomCardState extends State<RoomCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
+        color: isDark ? Colors.black54 : Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 3),
+            color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.25),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           )
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Карусель изображений
           widget.images.isNotEmpty
               ? SizedBox(
-                  height: 180,
+                  height: 200,
                   child: PageView.builder(
                     controller: _pageController,
                     itemCount: widget.images.length,
                     itemBuilder: (context, index) {
                       return ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         child: Image.network(
                           widget.images[index],
                           width: double.infinity,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               const Center(child: Icon(Icons.broken_image)),
-                          loadingBuilder: (context, child, progress) {
-                            if (progress == null) return child;
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
                             return const Center(child: CircularProgressIndicator());
                           },
                         ),
@@ -87,75 +90,90 @@ class _RoomCardState extends State<RoomCard> {
                     },
                   ),
                 )
-              : Center(child: Text('no_images').tr()),
-          const SizedBox(height: 12),
+              : Center(child: Text('no_images'.tr())),
+          const SizedBox(height: 14),
 
           // Название
           Text(
             widget.title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
 
-          // Характеристики
+          // Удобства
           Wrap(
             spacing: 8,
             runSpacing: 6,
             children: widget.features
                 .map((f) => Chip(
                       label: Text(f),
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: isDark ? Colors.grey[800] : Colors.blueGrey[50],
+                      labelStyle: TextStyle(
+                        color: isDark ? Colors.white70 : Colors.black87,
+                      ),
                     ))
                 .toList(),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
 
-          // Кнопка раскрытия описания
+          // Кнопка описания
           TextButton.icon(
-            onPressed: () {
-              setState(() {
-                _showDetails = !_showDetails;
-              });
-            },
+            onPressed: () => setState(() => _showDetails = !_showDetails),
             icon: Icon(
               _showDetails ? Icons.expand_less : Icons.info_outline,
               size: 18,
             ),
-            label: Text(_showDetails ? 'hide_description'.tr() : 'more_about_room'.tr()),
+            label: Text(
+              _showDetails ? 'hide_description'.tr() : 'more_about_room'.tr(),
+              style: const TextStyle(fontSize: 14),
+            ),
             style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
+              foregroundColor: Colors.teal,
               padding: EdgeInsets.zero,
-              textStyle: const TextStyle(fontSize: 14),
             ),
           ),
 
-          // Описание
-          if (_showDetails)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
+          // Описание (анимированное появление)
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 300),
+            crossFadeState: _showDetails ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            firstChild: const SizedBox.shrink(),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(top: 6),
               child: Text(
                 widget.description,
-                style: const TextStyle(fontSize: 13, height: 1.4),
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: isDark ? Colors.white70 : Colors.black87,
+                ),
               ),
             ),
+          ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
 
           // Цена
           Text(
             'from_price'.tr(args: [widget.price.toStringAsFixed(0)]),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Text('for_7_nights_with_flight',style: TextStyle(color: Colors.grey, fontSize: 13),).tr(),
-          const SizedBox(height: 12),
+          Text(
+            'for_7_nights_with_flight',
+            style: TextStyle(fontSize: 13, color: isDark ? Colors.grey[400] : Colors.grey[700]),
+          ).tr(),
 
-          // Кнопка выбора
+          const SizedBox(height: 16),
+
+          // Кнопка выбора номера
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
                 final selectedRange = await showDateRangePickerDialog(context);
-
                 if (selectedRange == null) return;
 
                 final nights = selectedRange.duration.inDays;
@@ -185,13 +203,17 @@ class _RoomCardState extends State<RoomCard> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.teal,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                 ),
+                elevation: 4,
               ),
-              child: Text('select_room').tr(),
+              child: Text(
+                'select_room'.tr(),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
             ),
           ),
         ],

@@ -50,44 +50,92 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('room_selection.title'.tr())),
-      body: FutureBuilder<List<Room>>(
-        future: _roomsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            print("Ошибка загрузки номеров: ${snapshot.error}");
-            return Center(child: Text('room_selection.error_loading'.tr()));
-          }
+@override
+Widget build(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
-          final rooms = snapshot.data ?? [];
+  return Scaffold(
+    // чтобы фон был под всей областью, и заголовок тоже
+    extendBodyBehindAppBar: true, 
+    
+    appBar: AppBar(
+      backgroundColor: Colors.transparent, // прозрачный фон
+      elevation: 0, // без тени
+      title: Text(
+        'room_selection.title'.tr(),
+        style: const TextStyle(
+          fontFamily: 'Pacifico',
+          fontSize: 28,
+          fontWeight: FontWeight.w400,
+          // можно настроить цвет, например белый с тенью
+          shadows: [
+            Shadow(
+              blurRadius: 4,
+              color: Colors.black54,
+              offset: Offset(1, 1),
+            ),
+          ],
+        ),
+      ),
+      centerTitle: true,
+      toolbarHeight: 80,
+    ),
 
-          if (rooms.isEmpty) {
-            return Center(child: Text('room_selection.no_rooms'.tr()));
-          }
+    body: Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            isDark
+                ? 'assets/images/background_dark.jpg'
+                : 'assets/images/background.jpg',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned.fill(
+          child: Container(
+            color: Colors.black.withOpacity(isDark ? 0.6 : 0.3),
+          ),
+        ),
+        Padding(
+          // чтобы контент не ушёл под AppBar, добавим отступ сверху
+          padding: const EdgeInsets.only(top: 80),
+          child: FutureBuilder<List<Room>>(
+            future: _roomsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                print("Ошибка загрузки номеров: ${snapshot.error}");
+                return Center(child: Text('room_selection.error_loading'.tr()));
+              }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: rooms.length,
-            itemBuilder: (context, index) {
-              final room = rooms[index];
-              return RoomCard(
-                hotel: widget.hotel,
-                title: room.title,
-                images: room.images,
-                features: room.features,
-                price: room.price,
-                description: room.description,
+              final rooms = snapshot.data ?? [];
+
+              if (rooms.isEmpty) {
+                return Center(child: Text('room_selection.no_rooms'.tr()));
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: rooms.length,
+                itemBuilder: (context, index) {
+                  final room = rooms[index];
+                  return RoomCard(
+                    hotel: widget.hotel,
+                    title: room.title,
+                    images: room.images,
+                    features: room.features,
+                    price: room.price,
+                    description: room.description,
+                  );
+                },
               );
             },
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }

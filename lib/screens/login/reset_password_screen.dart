@@ -12,8 +12,9 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  TextEditingController emailTextInputController = TextEditingController();
+  final emailTextInputController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -23,78 +24,136 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Future<void> resetPassword() async {
     final navigator = Navigator.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
+
+    setState(() => isLoading = true);
 
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: emailTextInputController.text.trim(),
       );
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
 
+      SnackBarService.showSnackBar(
+        context,
+        'reset.password_reset_success'.tr(),
+        false,
+      );
+
+      // Переход на экран входа после успешного сброса пароля
+      navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         SnackBarService.showSnackBar(
           context,
           'reset.email_not_registered'.tr(),
           true,
         );
-        return;
       } else {
         SnackBarService.showSnackBar(
           context,
           'reset.unknown_error'.tr(),
           true,
         );
-        return;
       }
+    } finally {
+      setState(() => isLoading = false);
     }
-
-    final snackBar = SnackBar(
-      content: Text('reset.password_reset_success'.tr()),
-      backgroundColor: Colors.green,
-    );
-
-    scaffoldMessenger.showSnackBar(snackBar);
-    navigator.pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('reset.title'.tr()),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                controller: emailTextInputController,
-                validator: (email) =>
-                    email != null && !EmailValidator.validate(email)
-                        ? 'reset.invalid_email'.tr()
-                        : null,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: 'reset.enter_email'.tr(),
-                ),
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: resetPassword,
-                child: Center(child: Text('reset.reset_password_button'.tr())),
-              ),
-            ],
-          ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: BackButton(
+          color: Colors.white,
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        title: Text(
+          'reset.title'.tr(),
+          style: const TextStyle(fontFamily: 'Pacifico', color: Colors.white),
+        ),
+        centerTitle: true,
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/images/background.jpg',
+            fit: BoxFit.cover,
+          ),
+          Container(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Form(
+                    key: formKey,
+                    child: TextFormField(
+                      controller: emailTextInputController,
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      validator: (email) =>
+                          email != null && !EmailValidator.validate(email)
+                              ? 'reset.invalid_email'.tr()
+                              : null,
+                      style: const TextStyle(color: Colors.black87),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.85),
+                        prefixIcon: const Icon(Icons.email),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintText: 'reset.enter_email'.tr(),
+                        hintStyle: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : resetPassword,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 0, 195, 255),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                      ),
+                      child: isLoading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'reset.reset_password_button'.tr(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

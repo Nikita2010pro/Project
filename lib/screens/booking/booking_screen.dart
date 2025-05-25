@@ -195,8 +195,6 @@ class _BookingScreenState extends State<BookingScreen> {
 
                     await _submitBooking();
 
-                    Navigator.of(context).pop(); // Закрыть лоадер
-
                     // Перейти на экран отелей и очистить стек
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/home', // Убедись, что у тебя этот маршрут прописан
