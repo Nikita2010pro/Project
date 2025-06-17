@@ -11,7 +11,12 @@ class FirebaseStream extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // ✅ Пока ждем — показываем индикатор
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
           return const Scaffold(
               body: Center(child: Text('Что-то пошло не так!')));
         } else if (snapshot.hasData) {
@@ -20,7 +25,7 @@ class FirebaseStream extends StatelessWidget {
           }
           return const HomeScreen();
         } else {
-          return const HomeScreen();
+          return const HomeScreen(); // или LoginScreen
         }
       },
     );

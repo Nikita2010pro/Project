@@ -81,9 +81,9 @@ class _BookingScreenState extends State<BookingScreen> {
       'email': emailController.text,
       'userId': user.uid,
       'createdAt': FieldValue.serverTimestamp(),
-      'hotelTitle': widget.bookingData.hotelName,           // Название отеля
-      'roomTitle': widget.bookingData.roomTitle,             // Название номера
-      'totalCost': widget.bookingData.totalCost.toString(),  // Общая стоимость
+      'hotelTitle': widget.bookingData.hotelName,           
+      'roomTitle': widget.bookingData.roomTitle,             
+      'totalCost': widget.bookingData.totalCost.toString(),  
     });
 
     for (final tourist in tourists) {

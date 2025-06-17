@@ -32,11 +32,11 @@ Future<DateTimeRange?> showDateRangePickerDialog(BuildContext context) async {
               textStyle: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          dialogTheme: DialogTheme(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+            dialogTheme: DialogThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
             ),
-          ),
         ),
         child: child!,
       );
